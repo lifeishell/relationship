@@ -165,6 +165,26 @@ define(['d3'], function (d3) {
                 });
 
             self.node.exit().remove();
+
+            self.link = self.link
+                .data(linksData, function (d) {
+                    return d.target.id + '-' + d.source.id;
+                });
+            self.link.exit().remove();
+
+            var linkEnter = self.link.enter().insert("g");
+            linkEnter.insert("path", ".node")
+                .attr('class', 'link')
+                .attr("marker-end", "url(#end)")
+                .attr('data-id', function(l){
+                    return l.id;
+                });
+            linkEnter.insert("text")
+                .attr('class', 'text')
+                .text(function (d) {
+                    return d.text;
+                });
+
             var nodeEnter = self.node.enter().append("svg:g")
                 .attr("class", "node")
                 .attr("data-id", function(d){
@@ -183,23 +203,6 @@ define(['d3'], function (d3) {
             nodeEnter
                 .on("mouseover", self.fade(.1))
                 .on("mouseout", self.fade(1));
-            self.link = self.link
-                .data(linksData, function (d) {
-                    return d.target.id + '-' + d.source.id;
-                });
-            self.link.exit().remove();
-            var linkEnter = self.link.enter().insert("g");
-            linkEnter.insert("path", ".node")
-                .attr('class', 'link')
-                .attr("marker-end", "url(#end)")
-                .attr('data-id', function(l){
-                    return l.id;
-                });
-            linkEnter.insert("text")
-                .attr('class', 'text')
-                .text(function (d) {
-                    return d.text;
-                });
         };
     }
     return PathRoadMap;
