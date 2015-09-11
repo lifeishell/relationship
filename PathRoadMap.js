@@ -1,4 +1,4 @@
-define(['d3', 'lodash'], function (d3, _) {
+define(['d3'], function (d3) {
     function PathRoadMap(elementId) {
         var self = this;
         var nodesData = [], linksData = [], width, height;
@@ -119,20 +119,30 @@ define(['d3', 'lodash'], function (d3, _) {
         this.initData = function (data) {
             nodesData.splice(0, nodesData.length);
             linksData.splice(0, linksData.length);
-            _.forEach(data, function (d) {
-                nodesData.push(d);
-            });
-            _.forEach(nodesData, function (n) {
-                _.forEach(n.relations, function(link){
-                    var target = _.find(nodesData, { id: link.withWho });
-                    if(_.find(nodesData, { id: link.withWho })){
-                        linksData.push({ source: n, target: target, text: link.text, id: n.id + '-' + target.id});
+
+            for (var k = 0; k < data.length; k++){
+                nodesData.push(data[k]);
+            }
+
+            for (var i = 0; i < nodesData.length; i++){
+                var n = nodesData[i];
+                for (var j = 0; j < n.relations.length; j++) {
+                    var link = n.relations[j];
+                    var target;
+                    for (var h = 0; h < nodesData.length; h++){
+                        if(nodesData[h].id == link.withWho){
+                            target = nodesData[h];
+                        }
                     }
-                });
-            });
-            _.forEach(linksData, function(d) {
-                linkedByIndex[d.id] = 1;
-            });
+                    if (target) {
+                        linksData.push({source: n, target: target, text: link.text, id: n.id + '-' + target.id});
+                    }
+                }
+            }
+
+            for(var t = 0; t < linksData.length; t++ ){
+                linkedByIndex[linksData[t].id] = 1;
+            }
         };
         this.drawLayout = function () {
 
@@ -140,12 +150,13 @@ define(['d3', 'lodash'], function (d3, _) {
                 .nodes(nodesData)
                 .links(linksData)
                 .linkDistance(function(d){
-                    var relations = _.filter(linksData, function(l){
-                        if(l.target == d.target || l.source == d.target){
-                            return true;
+                    var length = 1;
+                    for(var i = 0; i< linksData.length; i ++){
+                        if(linksData[i].target == d.target || linksData[i].source == d.target){
+                            length += 1;
                         }
-                    });
-                    return relations.length * 80;
+                    }
+                    return length * 80;
                 })
                 .start();
             self.node = self.node

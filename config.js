@@ -5,7 +5,6 @@ require.config({
     paths: {
         "d3": "d3",
         "data": "data",
-        "lodash": "lodash",
 
         "PathRoadMap": "PathRoadMap"
     }
