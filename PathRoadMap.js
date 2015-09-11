@@ -8,6 +8,22 @@ define(['d3', 'lodash'], function (d3, _) {
                 || linkedByIndex[b.id + "-" + a.id]
                 || a.id == b.id;
         }
+
+        this.gravity = function () {
+            // start with the center of the display
+            var cx = width / 2;
+            var cy = height / 2;
+            var middle = Math.floor(nodesData.length / 2);
+            var unit = cx / middle / 1.2;
+            // return a function that will modify the
+            // node's x and y values
+            return function (d) {
+                d.x =  unit * (d.index + 1);
+                d.y = (cy/1.5) * (d.index%2 + 1);
+                return d;
+            };
+        };
+
         this.initCanvas = function () {
             self.dragger = d3.behavior.drag()
                 .origin(function(d) { return d; })
@@ -34,12 +50,14 @@ define(['d3', 'lodash'], function (d3, _) {
             height = el.height();
             //Add d3 module network
             self.force = d3.layout.force()
-                .charge(-width)
-                //.gravity(0)
+                .charge(-500)
+                .gravity(0)
                 .size([width, height])
                 .on("tick", tick);
+
             self.svg = d3.select('#' + elementId)
                 .append("svg");
+
             self.svg.append("svg:defs").selectAll("marker")
                 .data(["end"])      // Different link/path types can be defined here
                 .enter().append("svg:marker")    // This section adds in the arrows
@@ -52,14 +70,17 @@ define(['d3', 'lodash'], function (d3, _) {
                 .attr("orient", "auto")
                 .append("svg:path")
                 .attr("d", "M0,-5L10,0L0,5");
+
             self.svg.append("rect")
                 .attr("width", '100%')
                 .attr("height", '100%')
                 .style("fill", "none")
                 .style("pointer-events", "all");
+
             self.container = self.svg.append("g");
             self.link = self.container.selectAll(".link");
             self.node = self.container.selectAll(".node");
+
             self.fade = function(opacity) {
                 return function(d) {
                     self.node.style("stroke-opacity", function(o) {
@@ -95,7 +116,9 @@ define(['d3', 'lodash'], function (d3, _) {
                 var point = path.getPointAtLength(length);
                 return "translate(" + (point.x-20) + "," + (point.y - 5) + ")";
             });
-            self.node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+            self.node
+                .each(self.gravity())
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
         }
         this.initData = function (data) {
             nodesData.splice(0, nodesData.length);
@@ -120,7 +143,14 @@ define(['d3', 'lodash'], function (d3, _) {
             self.force
                 .nodes(nodesData)
                 .links(linksData)
-                .linkDistance(300)
+                .linkDistance(function(d){
+                    var relations = _.filter(linksData, function(l){
+                        if(l.target == d.target || l.source == d.target){
+                            return true;
+                        }
+                    });
+                    return relations.length * 80;
+                })
                 .start();
             self.node = self.node
                 .data(nodesData, function (d) {
