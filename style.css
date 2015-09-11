@@ -1,0 +1,24 @@
+#relationship {
+    width: 100%;
+    height: 800px;
+}
+
+#relationship svg {
+    width: 100%;
+    height: 100%;
+}
+
+#relationship .link {
+    stroke: slategray;
+    fill: none;
+    stroke-width: 2px;
+    z-index: 1;
+}
+
+#relationship .node {
+     z-index: 5;
+ }
+
+#relationship .text {
+    z-index: 2;
+}
