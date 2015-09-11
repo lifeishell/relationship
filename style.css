@@ -1,6 +1,18 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin: 0;
+}
+
+.select {
+    position: absolute;
+        left: 10px;
+        top: 10px;
+}
 #relationship {
     width: 100%;
-    height: 850px;
+    height: 100%;
 }
 
 #relationship svg {

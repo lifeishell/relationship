@@ -9,14 +9,14 @@ define(['d3'], function (d3) {
                 || a.id == b.id;
         }
 
-        this.initCanvas = function () {
+        this.initCanvas = function (isFixed) {
             self.dragger = d3.behavior.drag()
                 .origin(function(d) { return d; })
                 .on("dragstart", dragstart)
                 .on("drag", dragmove)
                 .on("dragend", dragend);
 
-            function dragstart(d, i) {
+            function dragstart() {
                 self.force.stop(); // stops the force auto positioning before you start dragging
             }
 
@@ -27,8 +27,8 @@ define(['d3'], function (d3) {
                 d.y += d3.event.dy;
                 tick(); // this is the key to make it work together with updating both px,py,x,y on d !
             }
-            function dragend(d, i) {
-                d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+            function dragend(d) {
+                d.fixed = isFixed; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
                 tick();
                 self.force.resume();
             }
@@ -190,7 +190,10 @@ define(['d3'], function (d3) {
                 .attr("data-id", function(d){
                     return d.id;
                 })
-                .call(self.dragger);
+                .call(self.dragger)
+                .on('dblclick', function(d){
+                    d.fixed = false;
+                });
             nodeEnter.append('text')
                 .attr('transform', "translate(" + -20 + "," + 50 + ")")
                 .text(function (d) {
@@ -204,6 +207,16 @@ define(['d3'], function (d3) {
                 .on("mouseover", self.fade(.1))
                 .on("mouseout", self.fade(1));
         };
+
+        this.releaseNode = function(){
+            self.node.each(function(d){
+                d.fixed = false;
+            });
+        };
+
+        this.destory = function(){
+            $('#' + elementId).html('');
+        }
     }
     return PathRoadMap;
 });
