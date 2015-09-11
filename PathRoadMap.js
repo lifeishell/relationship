@@ -90,7 +90,10 @@ define(['d3', 'lodash'], function (d3, _) {
                 return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
             });
             self.link.selectAll('text').attr("transform", function(d) {
-                return "translate(" + (d.target.x - (d.target.x - d.source.x)/3) + "," + (d.source.y + (d.target.y - d.source.y)/3) + ")";
+                var path = d3.select('path[data-id=' + d.id + ']')[0][0];
+                var length = path.getTotalLength()/2;
+                var point = path.getPointAtLength(length);
+                return "translate(" + (point.x-20) + "," + (point.y - 5) + ")";
             });
             self.node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
         }
