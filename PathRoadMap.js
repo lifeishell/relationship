@@ -32,6 +32,15 @@ define(['d3', 'lodash'], function (d3, _) {
                 tick();
                 self.force.resume();
             }
+
+            var zoom = d3.behavior.zoom()
+                .scaleExtent([0.1, 10])
+                .on("zoom", zoomed);
+
+            function zoomed() {
+                self.container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            }
+
             var el = $('#' + elementId);
             width = el.width();
             height = el.height();
@@ -43,7 +52,8 @@ define(['d3', 'lodash'], function (d3, _) {
                 .on("tick", tick);
 
             self.svg = d3.select('#' + elementId)
-                .append("svg");
+                .append("svg")
+                .call(zoom);
 
             self.svg.append("svg:defs").selectAll("marker")
                 .data(["end"])      // Different link/path types can be defined here
