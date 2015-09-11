@@ -15,9 +15,11 @@ define(['d3', 'lodash'], function (d3, _) {
                 .on("dragstart", dragstart)
                 .on("drag", dragmove)
                 .on("dragend", dragend);
+
             function dragstart(d, i) {
                 self.force.stop(); // stops the force auto positioning before you start dragging
             }
+
             function dragmove(d) {
                 d.px += d3.event.dx;
                 d.py += d3.event.dy;
