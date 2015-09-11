@@ -52,8 +52,7 @@ define(['d3', 'lodash'], function (d3, _) {
                 .on("tick", tick);
 
             self.svg = d3.select('#' + elementId)
-                .append("svg")
-                .call(zoom);
+                .append("svg");
 
             self.svg.append("svg:defs").selectAll("marker")
                 .data(["end"])      // Different link/path types can be defined here
@@ -72,7 +71,8 @@ define(['d3', 'lodash'], function (d3, _) {
                 .attr("width", '100%')
                 .attr("height", '100%')
                 .style("fill", "none")
-                .style("pointer-events", "all");
+                .style("pointer-events", "all")
+                .call(zoom);
 
             self.container = self.svg.append("g");
             self.link = self.container.selectAll(".link");
