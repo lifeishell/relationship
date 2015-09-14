@@ -15,7 +15,7 @@ require(['PathRoadMap'], function(PathRoadMap){
 
     function renderPage(){
         map.initCanvas(true);
-        $.get('/get_relations').done(function(data){
+        $.get('http://localhost/get_relations').done(function(data){
             map.initData(data);
             map.drawLayout();
         });
@@ -28,6 +28,32 @@ require(['PathRoadMap'], function(PathRoadMap){
 
     renderPage();
 
+    function addPerson(){
+        var form = $('form[name=person]');
+        form.show();
+        form
+            .on('submit', function(){
+                if(!$('#name').val()){
+                    alert('请填写名字！！');
+                    return false;
+                }
+                console.log("===");
+                $.post('http://localhost/add_person/', { name: $('#name').val() }).done(function(response){
+                    if(response != 'success'){
+                        alert('重复啦！！！');
+                        return false;
+                    } else {
+                        form.hide();
+                        $('#relationship').html('');
+                        renderPage();
+                        return false;
+                    }
+                });
+                return false;
+            });
+    }
+
     $('body')
-        .on('click', 'button', onclick);
+        .on('click', '[data-js=release]', onclick)
+        .on('click', '[data-js=add_person]', addPerson);
 });

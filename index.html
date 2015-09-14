@@ -9,7 +9,13 @@
 </head>
 <body>
 <div class="select">
-<button>放开那些固定的点！！！</button>
+<button data-js="release">放开那些固定的点！！！</button>
+<button data-js="add_person">我要加个人！</button>
+    <form name="person" style="display: none">
+        <label for="name">名字：</label>
+        <input id="name" type="text" placeholder="不要加重复的人哟！" name="name" />
+        <button>走你！！</button>
+    </form>
 </div>
 <div id="relationship"></div>
 <script src="./index.js"></script>
