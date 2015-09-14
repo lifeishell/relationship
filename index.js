@@ -15,7 +15,7 @@ require(['PathRoadMap'], function(PathRoadMap){
 
     function renderPage(){
         map.initCanvas(true);
-        $.get('http://localhost/get_relations').done(function(data){
+        $.get('/get_relations').done(function(data){
             map.initData(data);
             map.drawLayout();
         });
@@ -38,7 +38,7 @@ require(['PathRoadMap'], function(PathRoadMap){
                     return false;
                 }
                 console.log("===");
-                $.post('http://localhost/add_person/', { name: $('#name').val() }).done(function(response){
+                $.post('/add_person/', { name: $('#name').val() }).done(function(response){
                     if(response != 'success'){
                         alert('重复啦！！！');
                         return false;
