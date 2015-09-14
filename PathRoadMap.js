@@ -202,8 +202,12 @@ define(['d3', 'd3-context-menu'], function (d3) {
                     return d.name;
                 });
             nodeEnter.append("circle")
-                .attr('fill', '#f60')
-                .attr('r', '15')
+                .attr('fill', function(d){
+                    return d.name == '511'? '#7D5880' : '#f60'
+                })
+                .attr('r', function(d){
+                    return d.name == '511'? '25' : '15'
+                })
                 .attr('transform', "translate(" + 0 + "," + 0 + ")");
             nodeEnter
                 .on("mouseover", self.fade(.1))
