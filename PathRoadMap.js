@@ -243,6 +243,7 @@ define(['d3', 'd3-context-menu'], function (d3) {
             }
             $('#from').val(data.name);
             $('#from_person').html(data.name);
+            $('#description').val('');
             $('#to_person').html(html.join(''));
         };
 
