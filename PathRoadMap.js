@@ -1,4 +1,4 @@
-define(['d3'], function (d3) {
+define(['d3', 'd3-context-menu'], function (d3) {
     function PathRoadMap(elementId) {
         var self = this;
         var nodesData = [], linksData = [], width, height;
@@ -191,9 +191,11 @@ define(['d3'], function (d3) {
                     return d.id;
                 })
                 .call(self.dragger)
+                .on('contextmenu', self.nodeContextMenu())
                 .on('dblclick', function(d){
                     d.fixed = false;
                 });
+
             nodeEnter.append('text')
                 .attr('transform', "translate(" + -20 + "," + 50 + ")")
                 .text(function (d) {
@@ -212,6 +214,36 @@ define(['d3'], function (d3) {
             self.node.each(function(d){
                 d.fixed = false;
             });
+        };
+
+        this.nodeContextMenu = function(){
+            var menu = [{
+                title: '建立这只对其他人的关系',
+                action: function(el, data, i) {
+                    var form = $('form[name=relation]');
+                    self.renderRelationForm(data);
+                    form.show();
+                }
+            }];
+            return d3.contextMenu(menu);
+        };
+
+        this.renderRelationForm = function(data){
+            var html = [];
+            for(var i = 0; i < nodesData.length; i ++){
+                var existing = false;
+                for(var j = 0; j < data.relations.length; j ++){
+                    if(nodesData[i].id == data.relations[j].withWho){
+                        existing = true;
+                    }
+                }
+                if(!existing && nodesData[i].id != data.id){
+                    html.push('<option value="' + nodesData[i].id + '">' + nodesData[i].name + '</option>')
+                }
+            }
+            $('#from').val(data.name);
+            $('#from_person').html(data.name);
+            $('#to_person').html(html.join(''));
         };
 
         this.destory = function(){

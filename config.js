@@ -4,8 +4,16 @@ require.config({
     baseUrl: "./",
     paths: {
         "d3": "d3.min",
-        "data": "data",
+        "d3-context-menu": "d3-context-menu",
 
         "PathRoadMap": "PathRoadMap"
+    },
+    shim: {
+        "d3-context-menu": {
+            deps: ['d3']
+        },
+        "PathRoadMap": {
+            deps: ['d3', "d3-context-menu"]
+        }
     }
 });

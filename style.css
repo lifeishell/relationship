@@ -34,3 +34,28 @@ html, body {
 #relationship .text {
     z-index: 2;
 }
+
+.d3-context-menu {
+    position: absolute;
+    display: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    min-width: 100px;
+    z-index:1200;
+}
+
+.d3-context-menu ul {
+    margin: 4px 0;
+    padding: 0;
+    cursor: default;
+}
+
+.d3-context-menu ul li {
+    padding: 4px 16px;
+    list-style-type: none;
+}
+
+.d3-context-menu ul li:hover {
+    background-color: #999;
+    color: #fff;
+}
