@@ -152,7 +152,7 @@ define(['d3', 'd3-context-menu'], function (d3) {
                 .linkDistance(function(d){
                     var length = 1;
                     for(var i = 0; i< linksData.length; i ++){
-                        if(linksData[i].target == d.target || linksData[i].source == d.target){
+                        if(linksData[i].target == d.source || linksData[i].source == d.source){
                             length += 1;
                         }
                     }
