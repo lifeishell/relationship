@@ -203,10 +203,10 @@ define(['d3', 'd3-context-menu'], function (d3) {
                 });
             nodeEnter.append("circle")
                 .attr('fill', function(d){
-                    return d.name == '511'? '#7D5880' : '#f60'
+                    return d.name == '怪姨姨'? '#7D5880' : '#f60'
                 })
                 .attr('r', function(d){
-                    return d.name == '511'? '25' : '15'
+                    return d.name == '怪姨姨'? '25' : '15'
                 })
                 .attr('transform', "translate(" + 0 + "," + 0 + ")");
             nodeEnter
