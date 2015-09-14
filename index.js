@@ -55,7 +55,10 @@ require(['PathRoadMap'], function(PathRoadMap){
 
     $('body')
         .on('click', '[data-js=release]', onclick)
-        .on('click', '[data-js=add_person]', addPerson);
+        .on('click', '[data-js=add_person]', addPerson)
+        .on('click', '[data-js=close-relation]', function(){
+            $('form[name=relation]').hide();
+        });
 
     $('form[name=relation]')
         .on('submit', function(){
